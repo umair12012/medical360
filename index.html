@@ -35,11 +35,72 @@
     margin-top: 12px;
     font-weight: 600;
   }
+    #preloader {
+  background-color: #007bff; /* Blue background */
+  color: white;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.6s ease;
+}
+
+#preloader.fade-out {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.stetho-loader {
+  font-size: 50px;
+  animation: rotateIcon 2s linear infinite;
+}
+
+@keyframes rotateIcon {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-text {
+  margin-top: 10px;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+  .loader-bar {
+  width: 200px;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  margin-top: 15px;
+  overflow: hidden;
+  position: relative;
+}
+
+.loader-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -50%;
+  width: 50%;
+  height: 100%;
+  background: var(--bs-primary);
+  animation: slideBar 1.2s linear infinite;
+}
+
 </style>
 
   
 </head>
 <body>
+    <!-- Preloader -->
+<div id="preloader">
+  <i class="fas fa-stethoscope stetho-loader"></i>
+  <div class="loading-text" id="loadingPercent"></div>
+  <div class="loader-bar"></div>
+</div>
  <!-- Improved Navigation Bar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top shadow-sm">
   <div class="container">
@@ -681,7 +742,20 @@
 
 
 
+  let percent = 0;
+  const preloader = document.getElementById("preloader");
+  const loadingText = document.getElementById("loadingPercent");
 
+  const interval = setInterval(() => {
+    percent++;
+  loadingText.textContent = `${percent}%`;
+
+    if (percent >= 100) {
+      clearInterval(interval);
+      preloader.classList.add("fade-out");
+      setTimeout(() => preloader.style.display = "none", 700);
+    }
+  }, 20); // adjust speed here (smaller = faster)
   
 
   </script>
